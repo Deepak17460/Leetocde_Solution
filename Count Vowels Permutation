@@ -1,0 +1,105 @@
+// Without using Dynmic programming
+
+it was giving the Tle
+
+Code:-
+ #include<bits/stdc++.h>
+#define mod 1000000007
+// template
+#define ll long long int
+ using namespace std;
+// GLoble decleard
+
+unordered_map<char,vector<char>>m;
+  int Helper(int n,int i,char prev){
+      // base condition
+      if(i>n) return 0;
+      // base condition
+      if(i==n){
+          switch(prev){
+              case 'a':
+              return 1;
+              case 'e':
+              return 2;
+              case 'i':     // i is followed a,u,o,e
+              return 4;
+              case 'o':
+              return 2;
+              case 'u':
+              return 1;
+              default:
+              return 5;
+          }
+      }
+      int ans=0;
+      for(auto next:m[prev]){
+          // Recursion is doing his work here on every key of vowels {i,e,o,u,a}
+          ans+=Helper(n,i+1,next);
+      }
+      return ans;
+  }
+ int main(){
+     int n;
+     cin>>n;
+     m['b']={'a','e','i','o','u'};
+     m['a']={'e'};   // a followed by e
+     m['e']={'a','i'};
+     m['i']={'a','e','o','u'};
+     m['o']={'i','u'};
+     m['u']={'a'};
+     cout<<Helper(n,1,'b')<<endl;
+ }
+ 
+ 
+ With dynamic Programming
+ 
+ code:-
+ 
+ #define mod 1000000007
+#include<bits/stdc++.h>
+class Solution {
+    unordered_map<char,list<char>>m;
+public: 
+    int Helper(int n,int i,char prev, vector<vector<int>>&dp){
+        if(i>n) return 0;
+        
+        if(i == n){
+            
+            switch(prev)
+            {
+                case 'a':
+                  return 1;
+                case 'e':
+                  return 2;
+                case 'i':
+                  return 4;
+                case 'o':
+                  return 2;
+                case 'u':
+                  return 1;
+                default:
+                  return 5;
+            }
+            
+        }
+        int ind=prev-'a';
+        if(dp[i][ind]!=-1) return dp[i][ind];
+        long long ans=0;
+        for(auto next:m[prev]){
+            ans+=(Helper(n,i+1,next,dp))%mod;
+        }
+        return dp[i][ind]=ans%mod;
+    }
+
+ int countVowelPermutation(int n){
+        vector<vector<int>>dp(n+1,vector<int>(27,-1));
+     m['c']={'a','e','i','o','u'};
+     m['a']={'e'};
+     m['e']={'a','i'};
+     m['i']={'a','e','o','u'};
+     m['o']={'i','u'};
+     m['u']={'a'};
+    return Helper(n,1,'c',dp);
+
+    }
+};
