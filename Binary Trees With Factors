@@ -1,0 +1,79 @@
+Using Dynamic Programming & Using Hashing map
+
+1st code:-
+
+Time Complexity is O(N^2)
+Space Comolexity is O(N)
+
+
+#define mod 1000000007
+#define ll int long long int
+class Solution {
+public:
+    int numFactoredBinaryTrees(vector<int>& arr) {
+          unordered_map<int,long long int>map;
+      
+      sort(arr.begin(),arr.end());
+      for(int i=0;i<size(arr);i++){
+        map.insert({arr[i],1});
+      }
+      
+      for(int i=1;i<size(arr);i++){
+        long long int count=0;
+        for(int j=0;j<i;j++){
+          if(arr[i]%arr[j]==0){
+            if(map.find(arr[i]/arr[j])!=map.end()){
+              count+=map.find(arr[j])->second*map.find(arr[i]/arr[j])->second;
+            }
+          }
+        }
+        map.find(arr[i])->second+=count;
+      }
+      
+      long long int sum=0;
+      for(auto it:map){
+        sum+=it.second;
+      }
+      
+      return sum%mod;
+    }
+};
+
+2nd code:-
+ #include<bits/stdc++.h>
+ #define mod 1000000007
+
+ using namespace std;
+
+
+ int main(){
+     constexpr int Mod = 1e9 + 7;
+     int n;
+     cin>>n;
+     vector<int>arr(n);
+     for(int i=0;i<n;i++){
+         cin>>arr[i];
+     }
+     // Take get the minimum Node to make BT
+     sort(arr.begin(),arr.end());
+     // With every one Node can be made BT for sure
+     vector<long long int>dp(n,1);
+     unordered_map<int,int>Ind;
+     for(int i=0;i<n;i++){
+         Ind[arr[i]]=i;
+     }
+     for(int i=1;i<n;i++){
+         for(int j=0;j<i;j++){
+             if(arr[i]%arr[j]==0){
+                 int right=arr[i]/arr[j];
+                 if(Ind.count(right)){
+                     dp[i]+=dp[j]*dp[Ind[right]];
+                     dp[i]%=Mod;
+                 }
+             }
+         }
+     }
+    
+    cout<<accumulate(dp.begin(),dp.end(),0L)<<endl;
+
+ }
