@@ -1,0 +1,96 @@
+// Basic overview on the map for string equality//
+
+ #include<bits/stdc++.h>
+
+ using namespace std;
+
+ 
+
+ int main(){
+     vector<string>str1,str2;
+     int n1;
+     cin>>n1;
+     for(int i=0;i<n1;i++){
+          string s;
+          cin>>s;
+          str1.push_back(s);
+     }
+     int n2;
+     cin>>n2;
+      for(int i=0;i<n2;i++){
+          string s;
+          cin>>s;
+          str2.push_back(s);
+     }
+     unordered_map<string,int>m1,m2;
+     for(auto s:str1){
+         m1[s]++;
+     }
+     for(auto i:m1){
+         cout<<i.first<<" "<<i.second<<endl;
+     }
+    for(auto s:str2){
+         m2[s]++;
+     }
+      for(auto i:m2){
+         cout<<i.first<<" "<<i.second<<endl;
+     }
+     if(m1==m2) cout<<"1";
+     else cout<<"0";
+ }
+ // Basic
+ int main(){
+    string str;
+    cin>>str;
+    vector<string>ans;
+    int i=0;
+    int n=str.size();
+    while(i<n){
+        string s=str.substr(i,3);
+        ans.push_back(s);
+        i+=3;
+    }
+    for(auto str:ans){
+        cout<<str<<endl;
+    }
+ }
+ // Final Code of Substring with Concatenation of All Words//
+ class Solution {   
+    bool IsSubstring(string& s, unordered_map<string,int>& m1, int start, int size, int checkSize) {
+        int i = start;
+        int n = s.length();
+        unordered_map<string, int>m2;
+        while(i < n) {
+            string right = s.substr(i, size);
+            if(m1.find(right) == m1.end()) return false;
+            else {
+                m2[right]++;
+                if(m2[right] > m1[right]) return false;
+                if(m2 == m1) return true;
+                i += size;
+            }
+        }
+        return false;
+    }
+    
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        vector<int> ans;
+        int size = words[0].size();
+        int checkSize = words.size();
+        int superLen = size*checkSize;
+        unordered_map<string, int> m1;
+        for(auto& word : words) {
+            m1[word]++;
+        }
+        
+        int n = s.length();
+        for(int i = 0; i < n - superLen + 1; i++) {
+            if(IsSubstring(s, m1, i, size, checkSize)) {
+                ans.push_back(i);
+            }
+        }
+        
+        return ans;
+    }
+};
